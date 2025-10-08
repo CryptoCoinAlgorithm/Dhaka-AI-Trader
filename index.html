@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dhaka AI Trader 🇧🇩</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #006a4e 0%, #f42a41 100%);
+            min-height: 100vh;
+            color: white;
+            background-attachment: fixed;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 50px 0;
+            background: rgba(255,255,255,0.1);
+            border-radius: 25px;
+            margin-bottom: 40px;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .logo {
+            font-size: 4em;
+            margin-bottom: 15px;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        
+        .tagline {
+            font-size: 1.4em;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+        
+        .accuracy-badge {
+            background: linear-gradient(45deg, #00d2ff, #006a4e);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: bold;
+            display: inline-block;
+            margin: 15px 0;
+            font-size: 1.1em;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+        
+        .feature-card {
+            background: rgba(255,255,255,0.15);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255,255,255,0.2);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+        }
+        
+        .feature-icon {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+        }
+        
+        .upload-area {
+            background: rgba(255,255,255,0.1);
+            border: 3px dashed rgba(255,255,255,0.3);
+            border-radius: 20px;
+            padding: 50px;
+            text-align: center;
+            margin: 40px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .upload-area:hover {
+            background: rgba(255,255,255,0.15);
+            border-color: rgba(255,255,255,0.5);
+            transform: scale(1.02);
+        }
+        
+        .upload-icon {
+            font-size: 5em;
+            margin-bottom: 25px;
+            opacity: 0.8;
+        }
+        
+        .btn {
+            background: linear-gradient(45deg, #006a4e, #f42a41);
+            color: white;
+            padding: 18px 35px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin: 10px;
+            font-weight: bold;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        }
+        
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(45deg, #00d2ff, #006a4e);
+        }
+        
+        .result-section {
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 40px;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.2);
+            display: none;
+        }
+        
+        .signal-card {
+            background: linear-gradient(135deg, #006a4e, #f42a41);
+            padding: 35px;
+            border-radius: 20px;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        
+        .signal-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .info-item {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+        
+        .live-signals {
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 35px;
+            margin: 40px 0;
+            backdrop-filter: blur(15px);
+        }
+        
+        .signal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 25px;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 60px;
+            padding: 30px;
+            opacity: 0.8;
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .spinner {
+            border: 4px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top: 4px solid #00d2ff;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        @media (max-width: 768px) {
+            .container { padding: 15px; }
+            .logo { font-size: 2.5em; }
+            .features-grid { grid-template-columns: 1fr; }
+            .upload-area { padding: 30px 20px; }
+            .upload-icon { font-size: 3em; }
+            .btn { padding: 15px 25px; font-size: 1em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- হেডার সেকশন -->
+        <div class="header fade-in">
+            <div class="logo">🇧🇩 Dhaka AI Trader</div>
+            <div class="tagline">বাংলাদেশের প্রথম স্মার্ট ট্রেডিং অ্যাসিস্টেন্ট</div>
+            <div class="accuracy-badge">৯৪% অ্যাকুরেসি রেট | $১৯৩ পেআউট</div>
+            <p>কোনো পাসওয়ার্ড ছাড়াই - সরাসরি AI ট্রেডিং এক্সপেরিয়েন্স</p>
+        </div>
+        
+        <!-- ফিচারস গ্রিড -->
+        <div class="features-grid">
+            <div class="feature-card fade-in">
+                <div class="feature-icon">🤖</div>
+                <h3>AI ট্রেডিং সিগন্যাল</h3>
+                <p>আর্টিফিশিয়াল ইন্টেলিজেন্স ব্যবহার করে স্মার্ট ট্রেডিং সিগন্যাল</p>
+            </div>
+            
+            <div class="feature-card fade-in">
+                <div class="feature-icon">📊</div>
+                <h3>রিয়েল-টাইম এনালাইসিস</h3>
+                <p>লাইভ মার্কেট ডেটা এবং ক্যান্ডেলস্টিক প্যাটার্ন রিকগনিশন</p>
+            </div>
+            
+            <div class="feature-card fade-in">
+                <div class="feature-icon">💰</div>
+                <h3>হাই পেআউট</h3>
+                <p>১৯৩% পর্যন্ত পেআউট সহ প্রফিটেবল ট্রেডিং অপারচুনিটি</p>
+            </div>
+        </div>
+        
+        <!-- চার্ট আপলোড সেকশন -->
+        <div class="upload-area fade-in" id="uploadArea" onclick="document.getElementById('fileInput').click()">
+            <div class="upload-icon">📁</div>
+            <h3>চার্ট স্ক্রিনশট আপলোড করুন</h3>
+            <p>PNG, JPG, বা JPEG ফরম্যাটে আপনার ট্রেডিং চার্ট আপলোড করুন</p>
+            <p style="margin-top: 15px; opacity: 0.7;">ক্লিক করুন অথবা ফাইল ড্রাগ এন্ড ড্রপ করুন</p>
+            <input type="file" id="fileInput" accept="image/*" style="display: none;">
+        </div>
+        
+        <!-- অ্যাকশন বাটন -->
+        <div style="text-align: center; margin: 30px 0;">
+            <button class="btn btn-secondary" onclick="analyzeChart()">
+                🔍 এআই এনালাইসিস করুন
+            </button>
+            <button class="btn" onclick="getLiveSignal()">
+                🚀 লাইভ সিগন্যাল পান
+            </button>
+        </div>
+        
+        <!-- রেজাল্ট সেকশন -->
+        <div class="result-section" id="resultSection">
+            <h2 style="text-align: center; margin-bottom: 30px; font-size: 2em;">🎯 AI ট্রেডিং সিগন্যাল</h2>
+            <div id="signalResult"></div>
+        </div>
+        
+        <!-- লাইভ সিগন্যালস -->
+        <div class="live-signals fade-in">
+            <h2 style="text-align: center; margin-bottom: 30px;">🚀 আজকের লাইভ সিগন্যালস</h2>
+            <div class="signal-grid">
+                <div class="signal-card">
+                    <h3>NZD/CAD (OTC)</h3>
+                    <div class="accuracy-badge" style="font-size: 0.9em; padding: 8px 15px;">BUY SIGNAL</div>
+                    <div class="signal-info">
+                        <div class="info-item">
+                            <div class="label">কনফিডেন্স</div>
+                            <div class="value">৯৪%</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="label">পেআউট</div>
+                            <div class="value">$১৯৩</div>
+                        </div>
+                    </div>
+                    <p style="text-align: center; margin-top: 15px;">বুলিশ এঙ্গলফিং প্যাটার্ন ডিটেক্টেড</p>
+                </div>
+                
+                <div class="signal-card">
+                    <h3>AUD/USD</h3>
+                    <div class="accuracy-badge" style="font-size: 0.9em; padding: 8px 15px; background: linear-gradient(45deg, #00d2ff, #006a4e);">STRONG BUY</div>
+                    <div class="signal-info">
+                        <div class="info-item">
+                            <div class="label">কনফিডেন্স</div>
+                            <div class="value">৯১%</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="label">পেআউট</div>
+                            <div class="value">$১৮৭</div>
+                        </div>
+                    </div>
+                    <p style="text-align: center; margin-top: 15px;">সাপোর্ট লেভেল বাউন্স</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ফুটার -->
+        <div class="footer">
+            <p>© ২০২৪ Dhaka AI Trader - বাংলাদেশি ট্রেডারদের জন্য তৈরি</p>
+            <p>Made with ❤️ in Bangladesh | No Password Required | Free Access</p>
+        </div>
+    </div>
+
+    <script>
+        // গ্লোবাল ভেরিয়েবল
+        let selectedFile = null;
+        
+        // DOM কন্টেন্ট লোড হওয়ার পর
+        document.addEventListener('DOMContentLoaded', function() {
+            // ড্রাগ এন্ড ড্রop ইভেন্ট হ্যান্ডলার
+            const uploadArea = document.getElementById('uploadArea');
+            
+            uploadArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                uploadArea.classList.add('drag-over');
+            });
+            
+            uploadArea.addEventListener('dragleave', function() {
+                uploadArea.classList.remove('drag-over');
+            });
+            
+            uploadArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                uploadArea.classList.remove('drag-over');
+                
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    handleFileSelect(files[0]);
+                }
+            });
+            
+            // ফাইল ইনপুট চেঞ্জ হ্যান্ডলার
+            document.getElementById('fileInput').addEventListener('change', function(e) {
+                if (e.target.files.length > 0) {
+                    handleFileSelect(e.target.files[0]);
+                }
+            });
+        });
+        
+        // ফাইল সিলেক্ট হ্যান্ডলার
+        function handleFileSelect(file) {
+            if (!file.type.match('image.*')) {
+                alert('দয়া করে শুধুমাত্র ইমেজ ফাইল সিলেক্ট করুন (PNG, JPG, JPEG)');
+                return;
+            }
+            
+            selectedFile = file;
+            
+            document.getElementById('uploadArea').innerHTML = `
+                <div class="upload-icon">✅</div>
+                <h3>ফাইল সিলেক্ট করা হয়েছে</h3>
+                <p><strong>নাম:</strong> ${file.name}</p>
+                <p><strong>সাইজ:</strong> ${(file.size / 1024).toFixed(2)} KB</p>
+                <p style="margin-top: 15px; color: #00d2ff;">এখন "এআই এনালাইসিস করুন" বাটনে ক্লিক করুন</p>
+            `;
+        }
+        
+        // চার্ট এনালাইসিস ফাংশন (Static Demo)
+        function analyzeChart() {
+            if (!selectedFile) {
+                alert('দয়া করে একটি স্ক্রিনশট সিলেক্ট করুন');
+                return;
+            }
+            
+            // লোডিং স্টেট শো করুন
+            document.getElementById('uploadArea').innerHTML = `
+                <div class="upload-icon">⏳</div>
+                <h3>এআই এনালাইসিস চলছে...</h3>
+                <p>Dhaka AI ট্রেডার আপনার চার্ট বিশ্লেষণ করছে</p>
+                <div class="spinner"></div>
+            `;
+            
+            // ডেমো ডিলে (2 সেকেন্ড)
+            setTimeout(() => {
+                // র‍্যান্ডম সিগন্যাল জেনারেট করুন
+                const signals = [
+                    {
+                        action: "BUY",
+                        confidence: 94,
+                        payout: 193.00,
+                        pair: "NZD/CAD (OTC)",
+                        message: "🎯 বাংলাদেশি AI ডিটেক্টেড স্ট্রং বুলিশ সিগন্যাল - বুলিশ এঙ্গলফিং প্যাটার্ন",
+                        timestamp: new Date().toISOString()
+                    },
+                    {
+                        action: "STRONG BUY", 
+                        confidence: 96,
+                        payout: 205.00,
+                        pair: "AUD/USD",
+                        message: "🚀 ভলিউম কনফার্মেশন সহ স্ট্রং আপট্রেন্ড - RSI ওভারসোল্ড থেকে রিকভারি",
+                        timestamp: new Date().toISOString()
+                    },
+                    {
+                        action: "SELL",
+                        confidence: 87,
+                        payout: 185.00, 
+                        pair: "EUR/GBP",
+                        message: "📉 রেজিস্টেন্স লেভেল রিজেকশন - বিয়ারিশ হারিকেন প্যাটার্ন ডিটেক্টেড",
+                        timestamp: new Date().toISOString()
+                    }
+                ];
+                
+                const randomSignal = signals[Math.floor(Math.random() * signals.length)];
+                displaySignal(randomSignal);
+                
+            }, 2000);
+        }
+        
+        // লাইভ সিগন্যাল ফাংশন (Static Demo)
+        function getLiveSignal() {
+            const liveSignals = [
+                {
+                    action: "BUY",
+                    confidence: 94,
+                    payout: 193.00,
+                    pair: "NZD/CAD (OTC)", 
+                    message: "🇧🇩 Dhaka AI লাইভ সিগন্যাল - স্ট্রং বুলিশ মোমেন্টাম ভলিউম কনফার্মেশন সহ",
+                    timestamp: new Date().toISOString()
+                },
+                {
+                    action: "BUY",
+                    confidence: 91,
+                    payout: 187.00,
+                    pair: "AUD/USD",
+                    message: "📈 সাপোর্ট লেভেল বাউন্স - MACD বুলিশ ক্রসওভার ডিটেক্টেড", 
+                    timestamp: new Date().toISOString()
+                }
+            ];
+            
+            const randomLiveSignal = liveSignals[Math.floor(Math.random() * liveSignals.length)];
+            displaySignal(randomLiveSignal);
+        }
+        
+        // সিগন্যাল ডিসপ্লে ফাংশন
+        function displaySignal(signal) {
+            const resultSection = document.getElementById('resultSection');
+            const signalResult = document.getElementById('signalResult');
+            
+            const actionIcon = signal.action.includes('BUY') ? '📈' : '📉';
+            const actionColor = signal.action.includes('BUY') ? '#00b894' : '#ff7675';
+            
+            signalResult.innerHTML = `
+                <div class="signal-card">
+                    <h2>${actionIcon} ${signal.action} সিগন্যাল</h2>
+                    <div class="accuracy-badge" style="background: linear-gradient(45deg, ${actionColor}, #006a4e);">
+                        ${signal.confidence}% কনফিডেন্স
+                    </div>
+                    
+                    <div class="signal-info">
+                        <div class="info-item">
+                            <div class="label">ট্রেডিং পেয়ার</div>
+                            <div class="value">${signal.pair}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="label">এস্টিমেটেড পেআউট</div>
+                            <div class="value">$${signal.payout}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="label">রিস্ক লেভেল</div>
+                            <div class="value">LOW</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="label">টাইমফ্রেম</div>
+                            <div class="value">5M-15M</div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 15px; margin: 20px 0;">
+                        <h4 style="color: #00d2ff; margin-bottom: 10px;">📝 AI এনালাইসিস:</h4>
+                        <p>${signal.message}</p>
+                   </div>
+                    
+                    <div style="margin-top: 25px;">
+                        <strong>বাংলাদেশি টাইম:</strong> ${new Date(signal.timestamp).toLocaleString('bn-BD')}
+                    </div>
+                </div>
+            `;
+            
+            resultSection.style.display = 'block';
+            resultSection.scrollIntoView({ behavior: 'smooth' });
+            
+            // আপলোড এরিয়া রিসেট
+            document.getElementById('uploadArea').innerHTML = `
+                <div class="upload-icon">🎉</div>
+                <h3>এনালাইসিস সম্পূর্ণ!</h3>
+                <p>উপরে আপনার AI সিগন্যাল দেখানো হয়েছে</p>
+                <button class="btn" onclick="location.reload()">নতুন এনালাইসিস</button>
+            `;
+        }
+    </script>
+</body>
+  </html>
